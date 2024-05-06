@@ -5,6 +5,8 @@ import com.visualnacert.reto.reto.organization.repository.OrganizationRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class OrganizationService {
@@ -12,5 +14,9 @@ public class OrganizationService {
 
     public Organization findByVisualOrganizationId(int visualOrganizationId){
         return repository.findByVisualOrganizationId(visualOrganizationId).orElseThrow();
+    }
+
+    public Organization findById(UUID organizationId){
+        return repository.findById(organizationId).orElseThrow();
     }
 }

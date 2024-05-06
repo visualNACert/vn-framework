@@ -1,6 +1,7 @@
 package com.visualnacert.reto.configuration;
 
 import com.visualnacert.reto.common.SessionObject;
+import com.visualnacert.reto.configuration.filters.ValidateOrganizationFilter;
 import com.visualnacert.reto.configuration.filters.ValidateUserFilter;
 import com.visualnacert.reto.reto.organization.service.OrganizationService;
 import com.visualnacert.reto.reto.user.service.UserService;
@@ -48,7 +49,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(httpAuth -> httpAuth.anyRequest().authenticated())
-                .addFilterAfter(validateUserFilter(), BearerTokenAuthenticationFilter.class);
+                .addFilterAfter(validateUserFilter(), BearerTokenAuthenticationFilter.class)
+                .addFilterAfter(validateOrganizationFilter(), ValidateUserFilter.class);
     }
 
     @Bean
@@ -59,6 +61,11 @@ public class SecurityConfig {
     @Bean
     public ValidateUserFilter validateUserFilter() {
         return new ValidateUserFilter(userService, organizationService, sessionObject);
+    }
+
+    @Bean
+    public ValidateOrganizationFilter validateOrganizationFilter() {
+        return new ValidateOrganizationFilter(organizationService, sessionObject);
     }
 
     @Bean

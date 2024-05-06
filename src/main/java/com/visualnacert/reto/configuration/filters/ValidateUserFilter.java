@@ -53,10 +53,6 @@ public class ValidateUserFilter extends OncePerRequestFilter {
                 User user = userService.findUser(username, org.getOrganizationId());
                 if(user != null) {
                     sessionObject.setUser(user);
-
-//                    UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList());
-//                    SecurityContextHolder.getContext().setAuthentication(authRequest);
-
                     doFilter(request, response, filterChain);
                 }else{
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
