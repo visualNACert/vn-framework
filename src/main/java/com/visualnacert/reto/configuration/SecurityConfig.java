@@ -1,5 +1,6 @@
 package com.visualnacert.reto.configuration;
 
+import com.visualnacert.reto.common.SessionObject;
 import com.visualnacert.reto.configuration.filters.ValidateUserFilter;
 import com.visualnacert.reto.reto.organization.service.OrganizationService;
 import com.visualnacert.reto.reto.user.service.UserService;
@@ -12,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.visual.security.auth.keycloak.KcMatcher;
 import org.visual.security.auth.visual.VisualMatcher;
 import org.visual.security.filters.VisualCustomFilter;
@@ -20,9 +20,9 @@ import org.visual.security.filters.VisualCustomFilter;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final UserService userService;
     private final OrganizationService organizationService;
+    private final SessionObject sessionObject;
 
     @Bean
     @Order(1)
@@ -48,8 +48,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(httpAuth -> httpAuth.anyRequest().authenticated())
-                .exceptionHandling(http -> http.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)))
-                .addFilterAfter(validateUserFilter(), AuthorizationFilter.class);
+                .addFilterAfter(validateUserFilter(), BearerTokenAuthenticationFilter.class);
     }
 
     @Bean
@@ -59,9 +58,8 @@ public class SecurityConfig {
 
     @Bean
     public ValidateUserFilter validateUserFilter() {
-        return new ValidateUserFilter(userService, organizationService);
+        return new ValidateUserFilter(userService, organizationService, sessionObject);
     }
-
 
     @Bean
     public VisualMatcher visualMatcher() {

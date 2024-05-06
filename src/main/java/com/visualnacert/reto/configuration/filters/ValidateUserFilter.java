@@ -1,5 +1,6 @@
 package com.visualnacert.reto.configuration.filters;
 
+import com.visualnacert.reto.common.SessionObject;
 import com.visualnacert.reto.reto.organization.model.Organization;
 import com.visualnacert.reto.reto.organization.service.OrganizationService;
 import com.visualnacert.reto.reto.user.model.User;
@@ -9,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.visual.security.auth.visual.dto.VnLoggedUser;
 
@@ -27,6 +30,7 @@ public class ValidateUserFilter extends OncePerRequestFilter {
 
     private final UserService userService;
     private final OrganizationService organizationService;
+    private final SessionObject sessionObject;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,7 +40,7 @@ public class ValidateUserFilter extends OncePerRequestFilter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()){
             if(authentication.getPrincipal() instanceof VnLoggedUser user){
-                username = user.getName();
+                username = user.getUsuario();
                 idOrg = user.getIdOrganizacion();
             }else{
                 Jwt jwt = (Jwt) authentication.getPrincipal();
@@ -47,9 +51,11 @@ public class ValidateUserFilter extends OncePerRequestFilter {
             try {
                 Organization org = organizationService.findByVisualOrganizationId(idOrg);
                 User user = userService.findUser(username, org.getOrganizationId());
-                    if(user != null) {
-                    UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList());
-                    SecurityContextHolder.getContext().setAuthentication(authRequest);
+                if(user != null) {
+                    sessionObject.setUser(user);
+
+//                    UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList());
+//                    SecurityContextHolder.getContext().setAuthentication(authRequest);
 
                     doFilter(request, response, filterChain);
                 }else{
