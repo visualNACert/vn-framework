@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="visual-spring-boot-framework">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/visual-spring-boot-framework.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
