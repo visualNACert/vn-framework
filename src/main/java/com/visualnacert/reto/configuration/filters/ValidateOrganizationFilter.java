@@ -1,6 +1,7 @@
 package com.visualnacert.reto.configuration.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.visual.framework.rest.dto.ErrorResponse;
 import com.visualnacert.reto.common.SessionObject;
 import com.visualnacert.reto.reto.organization.model.Organization;
 import com.visualnacert.reto.reto.organization.service.OrganizationService;
@@ -11,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.visual.rest.dto.ErrorResponse;
 
 import java.io.IOException;
 import java.util.UUID;

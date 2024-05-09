@@ -1,5 +1,8 @@
 package com.visualnacert.reto.configuration;
 
+import com.visual.framework.security.auth.keycloak.KcMatcher;
+import com.visual.framework.security.auth.visual.VisualMatcher;
+import com.visual.framework.security.filters.VisualCustomFilter;
 import com.visualnacert.reto.common.SessionObject;
 import com.visualnacert.reto.configuration.filters.ValidateOrganizationFilter;
 import com.visualnacert.reto.configuration.filters.ValidateUserFilter;
@@ -14,9 +17,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.visual.security.auth.keycloak.KcMatcher;
-import org.visual.security.auth.visual.VisualMatcher;
-import org.visual.security.filters.VisualCustomFilter;
 
 @Configuration
 @RequiredArgsConstructor

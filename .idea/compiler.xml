@@ -13,7 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="reto" options="-parameters" />
+      <module name="reto" options="" />
     </option>
   </component>
 </project>

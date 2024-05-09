@@ -1,5 +1,6 @@
 package com.visualnacert.reto.configuration.filters;
 
+import com.visual.framework.security.auth.visual.dto.VnLoggedUser;
 import com.visualnacert.reto.common.SessionObject;
 import com.visualnacert.reto.reto.organization.model.Organization;
 import com.visualnacert.reto.reto.organization.service.OrganizationService;
@@ -10,18 +11,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.visual.security.auth.visual.dto.VnLoggedUser;
-
 import java.io.IOException;
 
 @Component
@@ -39,7 +34,8 @@ public class ValidateUserFilter extends OncePerRequestFilter {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()){
-            if(authentication.getPrincipal() instanceof VnLoggedUser user){
+            if(authentication.getPrincipal() instanceof VnLoggedUser){
+                VnLoggedUser user = (VnLoggedUser) authentication.getPrincipal();
                 username = user.getUsuario();
                 idOrg = user.getIdOrganizacion();
             }else{

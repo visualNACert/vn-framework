@@ -17,10 +17,6 @@ public class Controller {
 
     @GetMapping()
     public String reto() throws JsonProcessingException {
-        StringBuilder data = new StringBuilder(mapper.writeValueAsString(sessionObject.getUser()));
-        data.append(" ");
-        data.append(mapper.writeValueAsString(sessionObject.getOrganization()));
-
-        return data.toString();
+        return "OK";
     }
 }
